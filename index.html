@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Making AI Work For You — LEAP Collective 2026</title>
+<meta name="description" content="Live icebreaker poll and Q&A for the LEAP Collective 2026 AI Workshop with Rik Banerjee & Srikanth Savant">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:     #0f172a;
+    --paper:   #f8fafc;
+    --surface: #ffffff;
+    --border:  #e2e8f0;
+    --muted:   #64748b;
+    --hint:    #94a3b8;
+    --blue:    #2563eb;
+    --cyan:    #0891b2;
+    --teal:    #059669;
+    --amber:   #b45309;
+    --blue-bg: #eff6ff;
+    --blue-bd: #bfdbfe;
+    --cyan-bg: #ecfeff;
+    --cyan-bd: #a5f3fc;
+    --mono:    'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ══════════════════════════════════════
+     HEADER
+  ══════════════════════════════════════ */
+  .site-header {
+    background: var(--ink);
+    padding: 2.5rem 1.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .site-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue) 0%, var(--cyan) 50%, var(--teal) 100%);
+  }
+
+  /* faint background word */
+  .site-header::before {
+    content: 'AI';
+    position: absolute;
+    right: -0.5rem;
+    top: -1rem;
+    font-family: 'Sora', sans-serif;
+    font-size: 9rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .event-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 99px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: pulse-live 2s infinite;
+  }
+
+  @keyframes pulse-live {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .site-header h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .site-header h1 .accent { color: #38bdf8; }
+
+  .site-header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    max-width: 480px;
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+  }
+
+  .speakers-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .spk-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .spk-chip-rik  { background: rgba(37,99,235,0.2);  border: 1px solid rgba(37,99,235,0.35);  color: #93c5fd; }
+  .spk-chip-sri  { background: rgba(8,145,178,0.2);  border: 1px solid rgba(8,145,178,0.35);  color: #67e8f9; }
+
+  .spk-av {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .av-r { background: var(--blue); }
+  .av-s { background: var(--cyan); }
+
+  /* ══════════════════════════════════════
+     TAB BAR
+  ══════════════════════════════════════ */
+  .tab-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--ink);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 0.95rem 1.25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.4);
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    letter-spacing: 0.01em;
+  }
+
+  .tab-btn:hover { color: rgba(255,255,255,0.75); }
+
+  .tab-btn.active {
+    color: #ffffff;
+    border-bottom-color: var(--blue);
+    background: rgba(37,99,235,0.08);
+  }
+
+  .tab-btn .tab-icon { font-size: 15px; }
+
+  /* hide all panels by default, show active */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ══════════════════════════════════════
+     PAGE WRAPPER
+  ══════════════════════════════════════ */
+  .page { max-width: 720px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  .section-block { margin-bottom: 3.5rem; scroll-margin-top: 72px; }
+
+  .section-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: var(--ink);
+  }
+
+  .section-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  /* ══════════════════════════════════════
+     ICEBREAKER POLL
+  ══════════════════════════════════════ */
+  .poll-card {
+    background: var(--ink);
+    border-radius: 14px;
+    padding: 1.75rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .poll-card::before {
+    content: '📊';
+    position: absolute;
+    right: 1.25rem;
+    top: 1.25rem;
+    font-size: 2rem;
+    opacity: 0.15;
+  }
+
+  .poll-card h3 {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.4rem;
+  }
+
+  .poll-card .poll-hint {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 1.5rem;
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+
+  .poll-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 9px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .poll-option:last-child { margin-bottom: 0; }
+
+  .poll-option:hover {
+    border-color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .poll-option.voted {
+    border-color: var(--blue);
+    background: rgba(37,99,235,0.12);
+  }
+
+  /* Progress fill behind option */
+  .poll-fill-bg {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: rgba(37,99,235,0.08);
+    border-radius: 9px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+    pointer-events: none;
+  }
+
+  .poll-option-text {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .poll-option-text .emoji { font-size: 16px; }
+
+  .poll-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+
+  .poll-pct {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    min-width: 32px;
+    text-align: right;
+    transition: color 0.2s;
+  }
+
+  .poll-option.voted .poll-pct { color: #93c5fd; }
+
+  .poll-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .poll-option.voted .poll-check {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+
+  .poll-option.voted .poll-check::after {
+    content: '';
+    display: block;
+    width: 5px; height: 8px;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  .poll-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .vote-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.06em;
+  }
+
+  .poll-reset {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: color 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .poll-reset:hover { color: rgba(255,255,255,0.5); }
+
+  /* Second poll card */
+  .poll-card-2 {
+    background: var(--blue-bg);
+    border: 1px solid var(--blue-bd);
+    border-radius: 14px;
+    padding: 1.5rem 1.75rem;
+    margin-top: 1rem;
+  }
+
+  .poll-card-2 h3 {
+    font-family: 'Sora', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+
+  .poll-card-2 .poll-hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .poll2-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 13px;
+    border: 1px solid var(--blue-bd);
+    border-radius: 8px;
+    margin-bottom: 7px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: white;
+    user-select: none;
+  }
+
+  .poll2-option:hover { border-color: var(--blue); background: #f0f7ff; }
+
+  .poll2-option.voted { border-color: var(--blue); background: #dbeafe; }
+
+  .poll2-option .p2-text {
+    font-size: 13px;
+    color: var(--ink);
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .poll2-option .p2-pct {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--hint);
+    min-width: 28px;
+    text-align: right;
+  }
+
+  .poll2-option.voted .p2-pct { color: var(--blue); font-weight: 600; }
+
+  .p2-bar-wrap { height: 4px; background: #e0eeff; border-radius: 2px; margin-top: 4px; overflow: hidden; }
+  .p2-bar      { height: 100%; background: var(--blue); border-radius: 2px; transition: width 0.5s ease; width: 0%; }
+
+  /* ══════════════════════════════════════
+     LIVE Q&A
+  ══════════════════════════════════════ */
+  .qa-wrap {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--surface);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+  }
+
+  .qa-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--ink);
+  }
+
+  .qa-head-left { display: flex; align-items: center; gap: 10px; }
+
+  .qa-head-icon {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  .qa-head h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .qa-head-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #38bdf8;
+    background: rgba(56,189,248,0.1);
+    border: 1px solid rgba(56,189,248,0.2);
+    border-radius: 99px;
+    padding: 3px 10px;
+  }
+
+  .ai-dot {
+    width: 5px; height: 5px;
+    background: #38bdf8;
+    border-radius: 50%;
+    animation: pulse-live 2s infinite;
+  }
+
+  /* Messages */
+  .qa-messages {
+    min-height: 240px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+  }
+
+  .qa-messages::-webkit-scrollbar { width: 4px; }
+  .qa-messages::-webkit-scrollbar-track { background: transparent; }
+  .qa-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    animation: msg-in 0.2s ease;
+  }
+
+  @keyframes msg-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg.user {
+    background: var(--ink);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .msg.ai {
+    background: var(--blue-bg);
+    border: 1px solid var(--blue-bd);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    color: var(--ink);
+  }
+
+  .msg-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 5px;
+  }
+
+  /* Typing dots */
+  .typing-dots { display: flex; gap: 4px; align-items: center; padding: 2px 0; }
+  .typing-dots span {
+    width: 6px; height: 6px;
+    background: var(--hint);
+    border-radius: 50%;
+    animation: dot-bounce 1.2s infinite;
+  }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dot-bounce {
+    0%, 80%, 100% { transform: translateY(0); }
+    40%           { transform: translateY(-5px); }
+  }
+
+  /* Quick Q buttons */
+  .quick-qs {
+    padding: 10px 1.25rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    background: #f8fafc;
+  }
+
+  .quick-q {
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 5px 11px;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    background: white;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .quick-q:hover {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+
+  /* Input row */
+  .qa-input-row {
+    display: flex;
+    border-top: 1px solid var(--border);
+  }
+
+  .qa-input {
+    flex: 1;
+    padding: 13px 16px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    background: white;
+    color: var(--ink);
+    outline: none;
+  }
+
+  .qa-input::placeholder { color: var(--hint); }
+
+  .qa-btn {
+    padding: 0 20px;
+    background: var(--blue);
+    color: white;
+    border: none;
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+
+  .qa-btn:hover   { background: #1d4ed8; }
+  .qa-btn:disabled { background: var(--hint); cursor: not-allowed; }
+
+  /* ══════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════ */
+  .site-footer {
+    background: var(--ink);
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .site-footer p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+
+  .site-footer a {
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+  }
+
+  .site-footer a:hover { color: white; }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════ */
+  @media (max-width: 480px) {
+    .site-header { padding: 2rem 1.25rem 1.75rem; }
+    .page { padding: 2rem 1.25rem 3rem; }
+    .poll-card { padding: 1.25rem; }
+    .qa-messages { min-height: 200px; max-height: 300px; }
+  }
+
+  /* site-wide top nav */
+  .site-nav {
+    background: #060d18;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 46px;
+  }
+  .site-nav-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .site-nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+  .site-nav-link {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 6px;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .site-nav-link:hover { color:rgba(255,255,255,0.85); background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.1); }
+  .site-nav-link.current { color:#fff; background:rgba(37,99,235,0.25); border-color:rgba(37,99,235,0.4); }
+  .footer-nav { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .footer-link { font-size:12px; color:rgba(255,255,255,0.35); text-decoration:none; padding:4px 10px; border:1px solid rgba(255,255,255,0.08); border-radius:6px; transition:all 0.15s; }
+  .footer-link:hover { color:rgba(255,255,255,0.7); border-color:rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<!-- ── SITE NAV ── -->
+<nav class="site-nav">
+  <span class="site-nav-brand">LEAP 2026 · AI Workshop</span>
+  <div class="site-nav-links">
+    <a href="index.html" class="site-nav-link current">🏠 Home</a>
+    <a href="ai_starter_kit.html" class="site-nav-link">📋 AI Starter Kit</a>
+    <a href="flyer.html" class="site-nav-link">📣 Flyer</a>
+    <a href="schedule.html" class="site-nav-link">🗓 Schedule</a>
+  </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="event-chip">
+      <span class="live-dot"></span>
+      LEAP Collective 2026 · May 2 · Shrewsbury MA
+    </div>
+    <h1>Making AI Work<br><span class="accent">For You</span></h1>
+    <p>Join the live poll and ask your AI questions anonymously. No technical background needed — just curiosity.</p>
+    <div class="speakers-row">
+      <div class="spk-chip spk-chip-rik">
+        <div class="spk-av av-r">RB</div>
+        Rik Banerjee · AI Builder
+      </div>
+      <div class="spk-chip spk-chip-sri">
+        <div class="spk-av av-s">SS</div>
+        Srikanth Savant · AI Builder
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── TAB BAR ── -->
+<nav class="tab-bar" role="tablist">
+  <button class="tab-btn active" onclick="showTab('poll', this)" role="tab">
+    <span class="tab-icon">📊</span> Icebreaker Poll
+  </button>
+  <button class="tab-btn" onclick="showTab('poll2', this)" role="tab">
+    <span class="tab-icon">🎯</span> Mid-Session Poll
+  </button>
+  <button class="tab-btn" onclick="showTab('qa', this)" role="tab">
+    <span class="tab-icon">💬</span> Ask AI Anything
+  </button>
+</nav>
+
+<!-- ── MAIN PAGE ── -->
+<main>
+
+  <!-- ════════════════════════════════
+       TAB 1 — ICEBREAKER POLL
+  ════════════════════════════════ -->
+  <div class="tab-panel page active" id="poll">
+    <div class="section-title">Opening Icebreaker</div>
+    <div class="section-sub">Tap to vote — results update live. No right or wrong answer.</div>
+
+    <div class="poll-card">
+      <h3>Where are you right now with AI?</h3>
+      <p class="poll-hint">tap once to vote · tap again to change your answer</p>
+
+      <div class="poll-option" onclick="vote1(this,0)">
+        <div class="poll-fill-bg" id="fill1-0"></div>
+        <span class="poll-option-text"><span class="emoji">🙈</span> I've barely used it</span>
+        <div class="poll-meta">
+          <span class="poll-pct" id="pct1-0">—</span>
+          <div class="poll-check" id="chk1-0"></div>
+        </div>
+      </div>
+
+      <div class="poll-option" onclick="vote1(this,1)">
+        <div class="poll-fill-bg" id="fill1-1"></div>
+        <span class="poll-option-text"><span class="emoji">🤔</span> Tried ChatGPT a few times</span>
+        <div class="poll-meta">
+          <span class="poll-pct" id="pct1-1">—</span>
+          <div class="poll-check" id="chk1-1"></div>
+        </div>
+      </div>
+
+      <div class="poll-option" onclick="vote1(this,2)">
+        <div class="poll-fill-bg" id="fill1-2"></div>
+        <span class="poll-option-text"><span class="emoji">🧪</span> Use it occasionally for work</span>
+        <div class="poll-meta">
+          <span class="poll-pct" id="pct1-2">—</span>
+          <div class="poll-check" id="chk1-2"></div>
+        </div>
+      </div>
+
+      <div class="poll-option" onclick="vote1(this,3)">
+        <div class="poll-fill-bg" id="fill1-3"></div>
+        <span class="poll-option-text"><span class="emoji">⚡</span> It's part of my daily workflow</span>
+        <div class="poll-meta">
+          <span class="poll-pct" id="pct1-3">—</span>
+          <div class="poll-check" id="chk1-3"></div>
+        </div>
+      </div>
+
+      <div class="poll-footer">
+        <span class="vote-count" id="voteCount1">0 responses</span>
+        <button class="poll-reset" onclick="resetPoll1()">Reset poll</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       TAB 2 — MID-SESSION POLL
+  ════════════════════════════════ -->
+  <div class="tab-panel page" id="poll2">
+    <div class="section-title">Mid-Session Poll</div>
+    <div class="section-sub">Ask this halfway through — let the audience drive the second half.</div>
+
+    <div class="poll-card-2">
+      <h3>Now that you've seen a few demos — what's the #1 use case you want to explore more?</h3>
+      <p class="poll-hint">Tap to vote · results are visible to everyone</p>
+
+      <div class="poll2-option" onclick="vote2(this,0)">
+        <span class="p2-text">💼 Saving time at work — emails, research, reports</span>
+        <span class="p2-pct" id="p2-0">—</span>
+      </div>
+      <div class="p2-bar-wrap"><div class="p2-bar" id="b2-0"></div></div>
+
+      <div class="poll2-option" onclick="vote2(this,1)" style="margin-top:8px">
+        <span class="p2-text">🚀 Growing my business or side hustle</span>
+        <span class="p2-pct" id="p2-1">—</span>
+      </div>
+      <div class="p2-bar-wrap"><div class="p2-bar" id="b2-1"></div></div>
+
+      <div class="poll2-option" onclick="vote2(this,2)" style="margin-top:8px">
+        <span class="p2-text">📄 Resume, job search, and career growth</span>
+        <span class="p2-pct" id="p2-2">—</span>
+      </div>
+      <div class="p2-bar-wrap"><div class="p2-bar" id="b2-2"></div></div>
+
+      <div class="poll2-option" onclick="vote2(this,3)" style="margin-top:8px">
+        <span class="p2-text">📈 Research and financial analysis</span>
+        <span class="p2-pct" id="p2-3">—</span>
+      </div>
+      <div class="p2-bar-wrap"><div class="p2-bar" id="b2-3"></div></div>
+
+      <div class="poll2-option" onclick="vote2(this,4)" style="margin-top:8px">
+        <span class="p2-text">🎓 Learning new skills faster</span>
+        <span class="p2-pct" id="p2-4">—</span>
+      </div>
+      <div class="p2-bar-wrap"><div class="p2-bar" id="b2-4"></div></div>
+
+      <div style="margin-top:12px; font-size:11px; color:var(--hint); font-family:var(--mono);" id="voteCount2">0 responses</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       TAB 3 — LIVE Q&A
+  ════════════════════════════════ -->
+  <div class="tab-panel page" id="qa">
+    <div class="section-title">Ask AI Anything</div>
+    <div class="section-sub">Type your question — get an instant answer from Claude, live during the session.</div>
+
+    <div class="qa-wrap">
+      <div class="qa-head">
+        <div class="qa-head-left">
+          <div class="qa-head-icon">💬</div>
+          <div>
+            <h3>Live Q&amp;A</h3>
+            <div class="qa-head-sub">Ask anything about AI — career, business, or just what's real vs hype</div>
+          </div>
+        </div>
+        <div class="ai-badge"><span class="ai-dot"></span>Claude</div>
+      </div>
+
+      <div class="qa-messages" id="qaMessages">
+        <div class="msg ai">
+          <div class="msg-label">Workshop AI</div>
+          Hi! I'm here to answer your AI questions live during the workshop. Ask me anything — no question is too basic or too advanced.
+        </div>
+      </div>
+
+      <div class="quick-qs">
+        <button class="quick-q" onclick="ask('Will AI take my job?')">Will AI take my job?</button>
+        <button class="quick-q" onclick="ask('Where do I start with AI?')">Where do I start?</button>
+        <button class="quick-q" onclick="ask('How do I use AI for my small business?')">AI for my business</button>
+        <button class="quick-q" onclick="ask('Is my data safe with AI tools?')">Is my data safe?</button>
+        <button class="quick-q" onclick="ask('What is the difference between ChatGPT and Claude?')">ChatGPT vs Claude</button>
+        <button class="quick-q" onclick="ask('How do I write a better AI prompt?')">Better prompts</button>
+      </div>
+
+      <div class="qa-input-row">
+        <input
+          class="qa-input"
+          id="qaInput"
+          placeholder="Type your question and press Enter…"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendQA();}"
+          autocomplete="off"
+        />
+        <button class="qa-btn" id="qaBtn" onclick="sendQA()">Ask →</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <div class="footer-nav">
+    <a href="index.html" class="footer-link">🏠 Home</a>
+    <a href="ai_starter_kit.html" class="footer-link">📋 AI Starter Kit</a>
+    <a href="flyer.html" class="footer-link">📣 Flyer</a>
+    <a href="schedule.html" class="footer-link">🗓 Schedule</a>
+  </div>
+  <p>
+    LEAP Collective 2026 &nbsp;·&nbsp;
+    India Society of Worcester &nbsp;·&nbsp;
+    <a href="https://iswonline.org/event-6599047">iswonline.org</a> &nbsp;·&nbsp;
+    Rik Banerjee &amp; Srikanth Savant
+  </p>
+</footer>
+
+<script>
+// ══════════════════════════════════════
+// Tab switching
+// ══════════════════════════════════════
+function showTab(id, btn) {
+  // hide all panels
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  // deactivate all tab buttons
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  // show selected panel and activate button
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  // scroll page to top of content
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ══════════════════════════════════════
+// POLL 1 — Icebreaker
+// ══════════════════════════════════════
+const v1 = [0,0,0,0];
+let u1 = -1;
+
+function vote1(el, idx) {
+  // deselect previous
+  if (u1 >= 0) {
+    document.querySelectorAll('#poll .poll-option')[u1].classList.remove('voted');
+    v1[u1] = Math.max(0, v1[u1] - 1);
+  }
+  if (u1 === idx) { u1 = -1; updatePoll1(); return; } // toggle off
+  u1 = idx;
+  v1[idx]++;
+  el.classList.add('voted');
+  updatePoll1();
+}
+
+function updatePoll1() {
+  const total = v1.reduce((a,b) => a+b, 0);
+  v1.forEach((n, i) => {
+    const pct = total ? Math.round(n/total*100) : 0;
+    document.getElementById('pct1-'+i).textContent = total ? pct+'%' : '—';
+    document.getElementById('fill1-'+i).style.width = pct+'%';
+  });
+  document.getElementById('voteCount1').textContent =
+    total === 0 ? '0 responses' : total + (total===1 ? ' response' : ' responses');
+}
+
+function resetPoll1() {
+  v1.fill(0); u1 = -1;
+  document.querySelectorAll('#poll .poll-option').forEach(o => o.classList.remove('voted'));
+  updatePoll1();
+}
+
+// ══════════════════════════════════════
+// POLL 2 — Mid-session
+// ══════════════════════════════════════
+const v2 = [0,0,0,0,0];
+let u2 = -1;
+
+function vote2(el, idx) {
+  if (u2 >= 0) {
+    document.querySelectorAll('.poll2-option')[u2].classList.remove('voted');
+    v2[u2] = Math.max(0, v2[u2] - 1);
+  }
+  if (u2 === idx) { u2 = -1; updatePoll2(); return; }
+  u2 = idx;
+  v2[idx]++;
+  el.classList.add('voted');
+  updatePoll2();
+}
+
+function updatePoll2() {
+  const total = v2.reduce((a,b) => a+b, 0);
+  v2.forEach((n, i) => {
+    const pct = total ? Math.round(n/total*100) : 0;
+    document.getElementById('p2-'+i).textContent = total ? pct+'%' : '—';
+    document.getElementById('b2-'+i).style.width = pct+'%';
+  });
+  document.getElementById('voteCount2').textContent =
+    total === 0 ? '0 responses' : total + (total===1 ? ' response' : ' responses');
+}
+
+// ══════════════════════════════════════
+// LIVE Q&A
+// ══════════════════════════════════════
+const history = [];
+
+async function sendQA() {
+  const input = document.getElementById('qaInput');
+  const btn   = document.getElementById('qaBtn');
+  const q     = input.value.trim();
+  if (!q) return;
+
+  const msgs = document.getElementById('qaMessages');
+
+  // user bubble
+  const userEl = document.createElement('div');
+  userEl.className = 'msg user';
+  userEl.textContent = q;
+  msgs.appendChild(userEl);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  input.value = '';
+  btn.disabled = true;
+
+  // typing indicator
+  const typingEl = document.createElement('div');
+  typingEl.className = 'msg ai';
+  typingEl.innerHTML = '<div class="msg-label">Workshop AI</div><div class="typing-dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(typingEl);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // build conversation history
+  history.push({ role: 'user', content: q });
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `You are an expert AI educator at a community workshop called LEAP Collective 2026, hosted by the India Society of Worcester. The co-speakers are Rik Banerjee (AI Builder who built EzyUpload.com, the Bazaar Protocol, and a DCF stock analysis platform) and Srikanth Savant (AI Builder & entrepreneur).
+
+Your answers are warm, jargon-free, honest, and practical. Keep responses to 3–5 sentences unless the question genuinely needs more. Use everyday analogies. Never overhype AI. If someone asks about tools, mention Claude, ChatGPT, Perplexity, Canva AI, or Notion AI as appropriate. Always refer back to the 85/15 principle when relevant: AI does 85% of the work, the human provides the irreplaceable 15%.`,
+        messages: history
+      })
+    });
+
+    const data = await res.json();
+    const answer = data.content?.[0]?.text || 'Something went wrong — please try again.';
+
+    // add to history
+    history.push({ role: 'assistant', content: answer });
+
+    typingEl.innerHTML = '<div class="msg-label">Workshop AI</div>' +
+      answer.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+
+  } catch(e) {
+    typingEl.innerHTML = '<div class="msg-label">Workshop AI</div>Couldn\'t reach the AI right now. That\'s actually a useful lesson — always have a backup plan when tools go offline. Try again in a moment!';
+    history.pop(); // remove failed message
+  }
+
+  btn.disabled = false;
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function ask(q) {
+  document.getElementById('qaInput').value = q;
+  // switch to the Q&A tab first
+  const qaBtn = document.querySelectorAll('.tab-btn')[2];
+  showTab('qa', qaBtn);
+  setTimeout(sendQA, 300);
+}
+</script>
+
+</body>
+</html>

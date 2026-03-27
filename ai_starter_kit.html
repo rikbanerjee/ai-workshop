@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Starter Kit — LEAP Collective 2026</title>
+<meta name="description" content="Tools, prompts and principles to put AI to work — by Rik Banerjee & Srikanth Savant">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* ── Tokens ── */
+:root {
+  --ink:      #0d1117;
+  --ink-2:    #3d4451;
+  --ink-3:    #6b7385;
+  --rule:     #e8eaed;
+  --surface:  #ffffff;
+  --paper:    #f6f7f9;
+  --blue:     #1a56db;
+  --blue-lt:  #ebf1ff;
+  --cyan:     #0891b2;
+  --cyan-lt:  #ecfeff;
+  --teal:     #047857;
+  --teal-lt:  #ecfdf5;
+  --amber:    #92400e;
+  --amber-lt: #fffbeb;
+  --purple:   #5b21b6;
+  --purple-lt:#f5f3ff;
+  --rose:     #9f1239;
+  --serif:    'Playfair Display', Georgia, serif;
+  --sans:     'DM Sans', system-ui, sans-serif;
+  --mono:     'DM Mono', 'Fira Mono', monospace;
+}
+
+body {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
+.hero {
+  background: var(--ink);
+  padding: 3.5rem 2rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grid texture */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Big ghost number */
+.hero::after {
+  content: '85';
+  position: absolute;
+  right: -1rem;
+  bottom: -2rem;
+  font-family: var(--serif);
+  font-size: 16rem;
+  font-weight: 900;
+  color: rgba(255,255,255,0.025);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #34d399;
+  animation: breathe 2.5s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.eyebrow-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.hero h1 .italic {
+  font-style: italic;
+  color: #34d399;
+}
+
+.hero-sub {
+  font-size: 15px;
+  color: rgba(255,255,255,0.45);
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+/* Speaker chips */
+.speaker-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.spk {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 14px 7px 9px;
+  border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+}
+
+.spk-av {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.av-r { background: var(--blue); }
+.av-s { background: var(--cyan); }
+
+/* ══════════════════════════════════════
+   PRINCIPLE BANNER
+══════════════════════════════════════ */
+.principle-bar {
+  background: var(--blue);
+  padding: 1.1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.principle-ratio {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.principle-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(255,255,255,0.25);
+  flex-shrink: 0;
+}
+
+.principle-text {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.5;
+  max-width: 420px;
+}
+
+.principle-text strong { color: #fff; }
+
+/* ══════════════════════════════════════
+   SECTION WRAPPER
+══════════════════════════════════════ */
+.wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section {
+  padding: 3rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.section:last-child { border-bottom: none; }
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-top: 0.3rem;
+}
+
+/* ══════════════════════════════════════
+   TOOLS GRID
+══════════════════════════════════════ */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.tool-card {
+  border-radius: 12px;
+  padding: 1.2rem 1.1rem;
+  border: 1.5px solid transparent;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  cursor: default;
+}
+
+.tool-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+}
+
+.tool-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-bottom: 0.85rem;
+}
+
+.tool-name {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 2px;
+  color: var(--ink);
+}
+
+.tool-url {
+  font-family: var(--mono);
+  font-size: 11px;
+  margin-bottom: 0.6rem;
+}
+
+.tool-desc {
+  font-size: 12.5px;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+/* tool colour variants */
+.tc-blue   { background: var(--blue-lt);   border-color: #c3d6f7; }
+.tc-blue   .tool-dot { background: var(--blue); }
+.tc-blue   .tool-url { color: var(--blue); }
+.tc-teal   { background: var(--teal-lt);   border-color: #a7f3d0; }
+.tc-teal   .tool-dot { background: var(--teal); }
+.tc-teal   .tool-url { color: var(--teal); }
+.tc-purple { background: var(--purple-lt); border-color: #ddd6fe; }
+.tc-purple .tool-dot { background: var(--purple); }
+.tc-purple .tool-url { color: var(--purple); }
+.tc-amber  { background: var(--amber-lt);  border-color: #fde68a; }
+.tc-amber  .tool-dot { background: var(--amber); }
+.tc-amber  .tool-url { color: var(--amber); }
+.tc-cyan   { background: var(--cyan-lt);   border-color: #a5f3fc; }
+.tc-cyan   .tool-dot { background: var(--cyan); }
+.tc-cyan   .tool-url { color: var(--cyan); }
+
+/* ══════════════════════════════════════
+   QUICK PROMPTS
+══════════════════════════════════════ */
+.prompts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 560px) { .prompts-grid { grid-template-columns: 1fr; } }
+
+.prompt-card {
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1.5px solid var(--rule);
+  background: var(--paper);
+  position: relative;
+  overflow: hidden;
+}
+
+.prompt-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+}
+
+.pc-blue::before   { background: var(--blue); }
+.pc-cyan::before   { background: var(--cyan); }
+.pc-teal::before   { background: var(--teal); }
+.pc-amber::before  { background: var(--amber); }
+
+.prompt-label {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border-radius: 99px;
+  margin-bottom: 0.75rem;
+}
+
+.pl-blue   { background: var(--blue-lt);   color: var(--blue); }
+.pl-cyan   { background: var(--cyan-lt);   color: var(--cyan); }
+.pl-teal   { background: var(--teal-lt);   color: var(--teal); }
+.pl-amber  { background: var(--amber-lt);  color: var(--amber); }
+
+.prompt-text {
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.65;
+  font-family: var(--sans);
+}
+
+.prompt-text em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 0.75rem;
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--ink-3);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.copy-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+.copy-btn.copied { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+/* ══════════════════════════════════════
+   STOCK ANALYSIS PROMPT
+══════════════════════════════════════ */
+.stock-wrap {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1.5px solid #c3d6f7;
+}
+
+.stock-header {
+  background: var(--ink);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stock-header-left h3 {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.stock-header-left p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  font-family: var(--mono);
+}
+
+.stock-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: rgba(26,86,219,0.3);
+  color: #93c5fd;
+  border: 1px solid rgba(147,197,253,0.3);
+  white-space: nowrap;
+}
+
+.stock-body {
+  background: #fff;
+  padding: 1.5rem;
+}
+
+.stock-intro {
+  font-size: 14px;
+  color: var(--blue);
+  font-weight: 600;
+  margin-bottom: 1.1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed var(--rule);
+}
+
+.stock-steps { list-style: none; }
+
+.stock-step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.stock-step:last-child { border-bottom: none; }
+
+.step-num {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  background: var(--blue-lt);
+  color: var(--blue);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.step-content {}
+.step-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 1px;
+}
+
+.step-desc {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.55;
+}
+
+.stock-footer {
+  margin-top: 1.1rem;
+  padding: 0.85rem 1rem;
+  background: var(--paper);
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.copy-full-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 1rem;
+  font-size: 12px;
+  font-family: var(--mono);
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.copy-full-btn:hover { background: #1748c4; }
+.copy-full-btn.copied { background: var(--teal); }
+
+/* ══════════════════════════════════════
+   GOLDEN RULE
+══════════════════════════════════════ */
+.rule-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 560px) { .rule-grid { grid-template-columns: 1fr; } }
+
+.rule-card {
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1.5px solid var(--rule);
+}
+
+.rule-card.dark {
+  background: var(--ink);
+  border-color: transparent;
+}
+
+.rule-card.light {
+  background: var(--blue-lt);
+  border-color: #c3d6f7;
+}
+
+.rule-card-label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 0.6rem;
+}
+
+.rule-card.dark .rule-card-label { color: rgba(255,255,255,0.35); }
+
+.rule-headline {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+}
+
+.rule-card.dark .rule-headline { color: #fff; }
+.rule-card.light .rule-headline { color: var(--ink); }
+
+.rule-examples { list-style: none; }
+
+.rule-ex {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 13px;
+}
+
+.rule-card.light .rule-ex { border-color: #c3d6f7; }
+.rule-ex:last-child { border-bottom: none; }
+
+.ex-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.bad  { background: #fee2e2; color: #991b1b; }
+.good { background: #d1fae5; color: #065f46; }
+
+.rule-ex-text { font-size: 13px; line-height: 1.5; }
+.rule-card.dark .rule-ex-text { color: rgba(255,255,255,0.7); }
+.rule-card.light .rule-ex-text { color: var(--ink-2); }
+
+/* 85/15 card */
+.big-ratio {
+  font-family: var(--serif);
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: #38bdf8;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.ratio-sub {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+.site-footer {
+  background: var(--ink);
+  padding: 2rem;
+  text-align: center;
+}
+
+.site-footer p {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.06em;
+}
+
+.site-footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+.site-footer a:hover { color: rgba(255,255,255,0.7); }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 600px) {
+  .hero { padding: 2.5rem 1.25rem 2.25rem; }
+  .wrapper { padding: 0 1.25rem; }
+  .tools-grid { grid-template-columns: 1fr 1fr; }
+  .principle-bar { gap: 0.75rem; }
+  .principle-divider { display: none; }
+}
+
+/* ══════════════════════════════════════
+   ENTRANCE ANIMATIONS
+══════════════════════════════════════ */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-inner > * {
+  animation: fade-up 0.6s ease both;
+}
+.hero-eyebrow  { animation-delay: 0.0s; }
+.hero h1       { animation-delay: 0.1s; }
+.hero-sub      { animation-delay: 0.2s; }
+.speaker-row   { animation-delay: 0.3s; }
+
+  /* site-wide top nav */
+  .site-nav {
+    background: #060d18;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 46px;
+  }
+  .site-nav-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .site-nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+  .site-nav-link {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 6px;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .site-nav-link:hover { color:rgba(255,255,255,0.85); background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.1); }
+  .site-nav-link.current { color:#fff; background:rgba(37,99,235,0.25); border-color:rgba(37,99,235,0.4); }
+  .footer-nav { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .footer-link { font-size:12px; color:rgba(255,255,255,0.35); text-decoration:none; padding:4px 10px; border:1px solid rgba(255,255,255,0.08); border-radius:6px; transition:all 0.15s; }
+  .footer-link:hover { color:rgba(255,255,255,0.7); border-color:rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     HERO
+══════════════════════════════ -->
+<!-- ── SITE NAV ── -->
+<nav class="site-nav">
+  <span class="site-nav-brand">LEAP 2026 · AI Workshop</span>
+  <div class="site-nav-links">
+    <a href="index.html" class="site-nav-link">🏠 Home</a>
+    <a href="ai_starter_kit.html" class="site-nav-link current">📋 AI Starter Kit</a>
+    <a href="flyer.html" class="site-nav-link">📣 Flyer</a>
+    <a href="schedule.html" class="site-nav-link">🗓 Schedule</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-dot"></span>
+      <span class="eyebrow-text">LEAP Collective 2026 · India Society of Worcester · May 2, Shrewsbury MA</span>
+    </div>
+    <h1>AI Starter Kit — <span class="italic">Put AI to Work</span></h1>
+    <p class="hero-sub">Tools, prompts and principles for your career and your business. No technical background required — just curiosity.</p>
+    <div class="speaker-row">
+      <div class="spk">
+        <div class="spk-av av-r">RB</div>
+        Rik Banerjee · AI Builder
+      </div>
+      <div class="spk">
+        <div class="spk-av av-s">SS</div>
+        Srikanth Savant · AI Builder
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════
+     PRINCIPLE BANNER
+══════════════════════════════ -->
+<div class="principle-bar">
+  <div class="principle-ratio">85 / 15</div>
+  <div class="principle-divider"></div>
+  <div class="principle-text">
+    <strong>AI does 85% of the heavy lifting.</strong> Your judgment, expertise and context are the irreplaceable 15%. This session is about making that 85% work for you — starting today.
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     MAIN CONTENT
+══════════════════════════════ -->
+<div class="wrapper">
+
+  <!-- TOOLS ─────────────────────── -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Essential Tools</h2>
+      <span class="section-label">All free to start</span>
+    </div>
+
+    <div class="tools-grid">
+      <div class="tool-card tc-blue">
+        <div class="tool-dot"></div>
+        <div class="tool-name">Claude</div>
+        <div class="tool-url">claude.ai</div>
+        <div class="tool-desc">Deep reasoning, long-form writing and nuanced analysis. Best for complex thinking tasks.</div>
+      </div>
+      <div class="tool-card tc-teal">
+        <div class="tool-dot"></div>
+        <div class="tool-name">ChatGPT</div>
+        <div class="tool-url">chatgpt.com</div>
+        <div class="tool-desc">Versatile general-purpose AI. Widely supported, great starting point for any task.</div>
+      </div>
+      <div class="tool-card tc-purple">
+        <div class="tool-dot"></div>
+        <div class="tool-name">Perplexity</div>
+        <div class="tool-url">perplexity.ai</div>
+        <div class="tool-desc">Real-time research with cited sources. Like Google, but it reads the pages for you.</div>
+      </div>
+      <div class="tool-card tc-amber">
+        <div class="tool-dot"></div>
+        <div class="tool-name">Canva AI</div>
+        <div class="tool-url">canva.com</div>
+        <div class="tool-desc">Design posts, decks and flyers in minutes. No design skills needed.</div>
+      </div>
+      <div class="tool-card tc-cyan">
+        <div class="tool-dot"></div>
+        <div class="tool-name">Notion AI</div>
+        <div class="tool-url">notion.com</div>
+        <div class="tool-desc">Notes, docs and planning with AI built right in. Summarize, draft, organize.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK PROMPTS ──────────────── -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Quick Prompts</h2>
+      <span class="section-label">Copy, paste &amp; go</span>
+    </div>
+
+    <div class="prompts-grid">
+
+      <div class="prompt-card pc-blue">
+        <span class="prompt-label pl-blue">Career productivity</span>
+        <p class="prompt-text">
+          I am a <em>[YOUR ROLE]</em> at a <em>[COMPANY TYPE]</em>. Give me 5 specific ways I could use AI to save time in my work this week. Be concrete, not generic.
+        </p>
+        <button class="copy-btn" onclick="copyPrompt(this, 'I am a [YOUR ROLE] at a [COMPANY TYPE]. Give me 5 specific ways I could use AI to save time in my work this week. Be concrete, not generic.')">
+          ⎘ Copy
+        </button>
+      </div>
+
+      <div class="prompt-card pc-cyan">
+        <span class="prompt-label pl-cyan">Business social media</span>
+        <p class="prompt-text">
+          I run a <em>[DESCRIBE YOUR BUSINESS]</em> in <em>[CITY/AREA]</em>. Write 3 Instagram captions: a weekend special, a behind-the-scenes moment, and a community post. Each under 150 characters.
+        </p>
+        <button class="copy-btn" onclick="copyPrompt(this, 'I run a [DESCRIBE YOUR BUSINESS] in [CITY/AREA]. Write 3 Instagram captions: a weekend special, a behind-the-scenes moment, and a community post. Each under 150 characters.')">
+          ⎘ Copy
+        </button>
+      </div>
+
+      <div class="prompt-card pc-teal">
+        <span class="prompt-label pl-teal">Resume rewrite</span>
+        <p class="prompt-text">
+          Here is one of my resume bullets: <em>[PASTE YOUR BULLET]</em>. Rewrite it to focus on measurable outcomes, not just duties. Give me 3 different versions.
+        </p>
+        <button class="copy-btn" onclick="copyPrompt(this, 'Here is one of my resume bullets: [PASTE YOUR BULLET]. Rewrite it to focus on measurable outcomes, not just duties. Give me 3 different versions.')">
+          ⎘ Copy
+        </button>
+      </div>
+
+      <div class="prompt-card pc-amber">
+        <span class="prompt-label pl-amber">Meeting follow-up email</span>
+        <p class="prompt-text">
+          Write a professional follow-up email after a meeting with <em>[CLIENT / MANAGER]</em>. Include key decisions, next steps, and owners. Tone: warm and direct. Max 120 words.
+        </p>
+        <button class="copy-btn" onclick="copyPrompt(this, 'Write a professional follow-up email after a meeting with [CLIENT / MANAGER]. Include key decisions, next steps, and owners. Tone: warm and direct. Max 120 words.')">
+          ⎘ Copy
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STOCK ANALYSIS ─────────────── -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Advanced Prompt</h2>
+      <span class="section-label">Full stock analysis deep-dive</span>
+    </div>
+
+    <div class="stock-wrap">
+      <div class="stock-header">
+        <div class="stock-header-left">
+          <h3>Stock Analysis Framework</h3>
+          <p>Paste into Claude or ChatGPT · Replace [TICKER] with your stock symbol</p>
+        </div>
+        <span class="stock-badge">Best with Claude</span>
+      </div>
+
+      <div class="stock-body">
+        <p class="stock-intro">
+          Act as a professional equity analyst. Analyze <strong>[TICKER SYMBOL, e.g. AAPL]</strong> using the following framework:
+        </p>
+
+        <ul class="stock-steps">
+          <li class="stock-step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <div class="step-title">Business overview</div>
+              <div class="step-desc">What does the company do, who are its customers, and what is its competitive moat?</div>
+            </div>
+          </li>
+          <li class="stock-step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <div class="step-title">Recent financials</div>
+              <div class="step-desc">Revenue growth rate, gross margin trend, and free cash flow over the last 3 years.</div>
+            </div>
+          </li>
+          <li class="stock-step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <div class="step-title">Valuation</div>
+              <div class="step-desc">Current P/E, forward P/E, and EV/EBITDA versus sector peers. Is the stock cheap or expensive?</div>
+            </div>
+          </li>
+          <li class="stock-step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              <div class="step-title">Key risks</div>
+              <div class="step-desc">Top 3 risks that could hurt the stock price over the next 12 months.</div>
+            </div>
+          </li>
+          <li class="stock-step">
+            <span class="step-num">5</span>
+            <div class="step-content">
+              <div class="step-title">Bull case vs. bear case</div>
+              <div class="step-desc">One paragraph for each scenario — the optimistic and the pessimistic outlook.</div>
+            </div>
+          </li>
+          <li class="stock-step">
+            <span class="step-num">6</span>
+            <div class="step-content">
+              <div class="step-title">Verdict</div>
+              <div class="step-desc">Buy, Hold, or Avoid — with a one-sentence rationale and a suggested entry price range.</div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="stock-footer">
+          Use publicly available data only. Be specific with numbers. Flag any figures you are uncertain about.
+        </div>
+
+        <button class="copy-full-btn" id="copyStockBtn" onclick="copyStock()">
+          ⎘ Copy full prompt
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES ─────────────────── -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Core Principles</h2>
+      <span class="section-label">Take these home</span>
+    </div>
+
+    <div class="rule-grid">
+
+      <div class="rule-card dark">
+        <div class="rule-card-label">The 85 / 15 rule</div>
+        <div class="big-ratio">85/15</div>
+        <p class="ratio-sub">
+          AI handles 85% — drafting, research, repetition. You provide the irreplaceable 15%: judgment, domain knowledge, and the context only you have. That's not a small thing. That's everything.
+        </p>
+      </div>
+
+      <div class="rule-card light">
+        <div class="rule-card-label">The golden rule of prompting</div>
+        <div class="rule-headline">More context = better answers</div>
+        <ul class="rule-examples">
+          <li class="rule-ex">
+            <span class="ex-badge bad">✗</span>
+            <span class="rule-ex-text">"Write me an email"</span>
+          </li>
+          <li class="rule-ex">
+            <span class="ex-badge good">✓</span>
+            <span class="rule-ex-text">"Write a 3-sentence follow-up to a client who hasn't replied in 2 weeks. Warm tone. Max 3 sentences."</span>
+          </li>
+          <li class="rule-ex">
+            <span class="ex-badge bad">✗</span>
+            <span class="rule-ex-text">"Help me with my resume"</span>
+          </li>
+          <li class="rule-ex">
+            <span class="ex-badge good">✓</span>
+            <span class="rule-ex-text">"Rewrite this bullet to show outcomes, not tasks. Give me 3 versions: [paste bullet]"</span>
+          </li>
+          <li class="rule-ex">
+            <span class="ex-badge bad">✗</span>
+            <span class="rule-ex-text">"Analyze Apple stock"</span>
+          </li>
+          <li class="rule-ex">
+            <span class="ex-badge good">✓</span>
+            <span class="rule-ex-text">"Act as an equity analyst. Analyze AAPL covering valuation, risks, bull/bear case and a buy/hold/avoid verdict."</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- /wrapper -->
+
+<!-- ══════════════════════════════
+     FOOTER
+══════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-nav">
+    <a href="index.html" class="footer-link">🏠 Home</a>
+    <a href="ai_starter_kit.html" class="footer-link">📋 AI Starter Kit</a>
+    <a href="flyer.html" class="footer-link">📣 Flyer</a>
+    <a href="schedule.html" class="footer-link">🗓 Schedule</a>
+  </div>
+  <p>
+    LEAP Collective 2026 &nbsp;·&nbsp;
+    India Society of Worcester &nbsp;·&nbsp;
+    <a href="https://iswonline.org/event-6599047">iswonline.org</a>
+    &nbsp;·&nbsp;
+    Rik Banerjee &amp; Srikanth Savant
+  </p>
+</footer>
+
+<script>
+// ── Copy prompt buttons ──
+function copyPrompt(btn, text) {
+  navigator.clipboard.writeText(text).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+  btn.textContent = '✓ Copied!';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = '⎘ Copy'; btn.classList.remove('copied'); }, 2000);
+}
+
+// ── Copy full stock prompt ──
+const STOCK_PROMPT = `Act as a professional equity analyst. Analyze [TICKER SYMBOL, e.g. AAPL] using the following framework:
+
+1. Business overview — What does the company do, who are its customers, and what is its competitive moat?
+2. Recent financials — Revenue growth rate, gross margin trend, and free cash flow over the last 3 years.
+3. Valuation — Current P/E, forward P/E, and EV/EBITDA versus sector peers. Is the stock cheap or expensive?
+4. Key risks — Top 3 risks that could hurt the stock price over the next 12 months.
+5. Bull case vs. bear case — One paragraph for each scenario.
+6. Verdict — Buy, Hold, or Avoid with a one-sentence rationale and a suggested entry price range.
+
+Use publicly available data only. Be specific with numbers. Flag any figures you are uncertain about.`;
+
+function copyStock() {
+  const btn = document.getElementById('copyStockBtn');
+  navigator.clipboard.writeText(STOCK_PROMPT).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = STOCK_PROMPT; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+  btn.textContent = '✓ Copied to clipboard!';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = '⎘ Copy full prompt'; btn.classList.remove('copied'); }, 2500);
+}
+</script>
+</body>
+</html>
